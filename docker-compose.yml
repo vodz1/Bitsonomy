@@ -1,0 +1,31 @@
+services:
+  api:
+    build:
+      context: .  # This points to the current directory (organization api)
+      dockerfile: Dockerfile  # Explicitly specify the Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - BackEnd/organization-api/.env
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: organization-db
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+volumes:
+  mongo_data:
+
+networks:
+  app-network:
+    driver: bridge
